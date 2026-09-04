@@ -13,6 +13,7 @@ export interface SaveAnswerInput {
 
 export interface QuestionSnapshot {
   id: string;
+  passageId?: string | null;
   text: string;
   type: QuestionType;
   instructions?: string | null;

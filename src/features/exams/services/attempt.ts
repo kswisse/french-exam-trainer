@@ -5,6 +5,7 @@ import type { AttemptMode } from "@/generated/prisma/browser";
 
 function buildQuestionSnapshot(question: {
   id: string;
+  passageId?: string | null;
   text: string;
   type: string;
   instructions?: string | null;
@@ -30,6 +31,7 @@ function buildQuestionSnapshot(question: {
 }): QuestionSnapshot {
   return {
     id: question.id,
+    passageId: question.passageId,
     text: question.text,
     type: question.type as QuestionSnapshot["type"],
     instructions: question.instructions,
