@@ -347,8 +347,8 @@ async function main() {
       order: 8,
       answers: {
         create: [
-          { id: uuid(), text: "suis", isAcceptable: true, normalizationRule: { trimWhitespace: true, caseInsensitive: true } },
-          { id: uuid(), text: "hier", isAcceptable: true, normalizationRule: { trimWhitespace: true, caseInsensitive: true } },
+          { id: uuid(), text: "blank_1: suis", isAcceptable: true, normalizationRule: { trimWhitespace: true, caseInsensitive: true } },
+          { id: uuid(), text: "blank_2: hier", isAcceptable: true, normalizationRule: { trimWhitespace: true, caseInsensitive: true } },
         ],
       },
       skills: {
@@ -376,7 +376,7 @@ async function main() {
       order: 9,
       answers: {
         create: [
-          { id: uuid(), text: "1-A, 2-D, 3-B, 4-C", isAcceptable: true, normalizationRule: { trimWhitespace: true, caseInsensitive: true } },
+          { id: uuid(), text: '{"1":"A","2":"D","3":"B","4":"C"}', isAcceptable: true, normalizationRule: { trimWhitespace: true, caseInsensitive: true } },
         ],
       },
       skills: {
@@ -482,7 +482,7 @@ async function main() {
       order: 13,
       answers: {
         create: [
-          { id: uuid(), text: "avons fini", isAcceptable: true, normalizationRule: { trimWhitespace: true, caseInsensitive: true } },
+          { id: uuid(), text: "blank_1: avons fini", isAcceptable: true, normalizationRule: { trimWhitespace: true, caseInsensitive: true } },
         ],
       },
       skills: {
@@ -639,9 +639,9 @@ async function main() {
       order: 19,
       answers: {
         create: [
-          { id: uuid(), text: "crépuscule", isAcceptable: true, normalizationRule: { trimWhitespace: true, caseInsensitive: true } },
-          { id: uuid(), text: "nuit", isAcceptable: true, normalizationRule: { trimWhitespace: true, caseInsensitive: true } },
-          { id: uuid(), text: "aube", isAcceptable: true, normalizationRule: { trimWhitespace: true, caseInsensitive: true } },
+          { id: uuid(), text: "blank_1: crépuscule", isAcceptable: true, normalizationRule: { trimWhitespace: true, caseInsensitive: true } },
+          { id: uuid(), text: "blank_1: nuit", isAcceptable: true, normalizationRule: { trimWhitespace: true, caseInsensitive: true } },
+          { id: uuid(), text: "blank_1: aube", isAcceptable: true, normalizationRule: { trimWhitespace: true, caseInsensitive: true } },
         ],
       },
       skills: {
