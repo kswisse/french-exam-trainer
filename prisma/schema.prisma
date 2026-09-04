@@ -1,0 +1,345 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Core Entities ────────────────────────────────────────────────
+
+model Profile {
+  id          String   @id @default(uuid()) // references Supabase auth.users.id
+  displayName String?
+  email       String   @unique
+  role        Role     @default(STUDENT)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  examAttempts ExamAttempt[]
+  mistakes     Mistake[]
+}
+
+model Exam {
+  id               String     @id @default(uuid())
+  title            String
+  description      String?
+  type             String?    // DELF B2, HSGQG, etc. — flexible, not enum
+  year             Int?
+  language         String     @default("fr")
+  timeLimitMinutes Int?
+  totalPoints      Int?       // null = computed from questions at query time
+  negativePoints   Int        @default(0)
+  mode             ExamMode   @default(BOTH)
+  status           ExamStatus @default(DRAFT)
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+
+  sections ExamSection[]
+  attempts ExamAttempt[]
+  sources  ExamSource[]
+  imports  ContentImport[]
+}
+
+model ExamSection {
+  id           String   @id @default(uuid())
+  examId       String
+  title        String
+  instructions String?
+  order        Int
+  createdAt    DateTime @default(now())
+
+  exam      Exam       @relation(fields: [examId], references: [id], onDelete: Cascade)
+  passages  Passage[]
+  questions Question[]
+
+  @@index([examId])
+}
+
+model Passage {
+  id         String       @id @default(uuid())
+  sectionId  String
+  title      String?
+  content    String       // Reading text, transcript, or description
+  type       PassageType
+  sourcePage Int?
+  createdAt  DateTime     @default(now())
+
+  section   ExamSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  questions Question[]
+
+  @@index([sectionId])
+}
+
+model Question {
+  id           String       @id @default(uuid())
+  sectionId    String
+  passageId    String?
+  number       Int
+  type         QuestionType
+  text         String
+  instructions String?
+  points       Int          @default(1)
+  difficulty   String?      // B1, B2, C1, etc. — flexible
+  order        Int
+  sourcePage   Int?
+  createdAt    DateTime     @default(now())
+
+  section  ExamSection      @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  passage  Passage?         @relation(fields: [passageId], references: [id], onDelete: Restrict)
+  options  QuestionOption[]
+  answers  QuestionAnswer[]
+  skills   QuestionSkill[]
+  attempts QuestionAttempt[]
+  versions QuestionVersion[]
+
+  @@index([sectionId])
+  @@index([passageId])
+}
+
+model QuestionOption {
+  id         String   @id @default(uuid())
+  questionId String
+  label      String   // A, B, C, D, etc.
+  text       String
+  isCorrect  Boolean  @default(false)
+
+  question   Question           @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  selectedIn QuestionAttempt[]
+
+  @@index([questionId])
+}
+
+model QuestionAnswer {
+  id               String   @id @default(uuid())
+  questionId       String
+  text             String
+  isAcceptable     Boolean  @default(true)
+  normalizationRule Json?   // { trimWhitespace, caseInsensitive, removeAccents, etc. }
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([questionId])
+}
+
+model Skill {
+  id       String  @id @default(uuid())
+  name     String
+  parentId String?
+  category String?
+
+  parent   Skill?          @relation("SkillHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  children Skill[]         @relation("SkillHierarchy")
+  questions QuestionSkill[]
+
+  @@index([parentId])
+}
+
+model QuestionSkill {
+  id         String @id @default(uuid())
+  questionId String
+  skillId    String
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  skill    Skill    @relation(fields: [skillId], references: [id], onDelete: Restrict)
+
+  @@unique([questionId, skillId])
+}
+
+// ─── Exam Attempt Entities ────────────────────────────────────────
+
+model ExamAttempt {
+  id               String       @id @default(uuid())
+  profileId        String
+  examId           String
+  status           AttemptStatus @default(IN_PROGRESS)
+  mode             AttemptMode   // REAL_EXAM or PRACTICE — which mode was used
+  startedAt        DateTime     @default(now())
+  submittedAt      DateTime?
+  timeSpentSeconds Int          @default(0)
+
+  profile  Profile          @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  exam     Exam             @relation(fields: [examId], references: [id], onDelete: Cascade)
+  questions QuestionAttempt[]
+
+  @@index([profileId])
+  @@index([examId])
+  @@index([profileId, examId])
+}
+
+model QuestionAttempt {
+  id               String    @id @default(uuid())
+  attemptId        String
+  questionId       String
+  selectedOptionId String?
+  textAnswer       String?
+  questionSnapshot Json      // Frozen copy of question + options at attempt time (see Section 8.5)
+  isCorrect        Boolean?  // null for WRITING questions not auto-graded in V1
+  pointsAwarded    Int       @default(0)
+  timeSpentSeconds Int       @default(0)
+  createdAt        DateTime  @default(now())
+
+  attempt  ExamAttempt    @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question Question       @relation(fields: [questionId], references: [id], onDelete: Restrict)
+  option   QuestionOption? @relation(fields: [selectedOptionId], references: [id], onDelete: Restrict)
+  mistake  Mistake?
+
+  @@index([attemptId])
+  @@index([questionId])
+}
+
+model QuestionVersion {
+  id         String   @id @default(uuid())
+  questionId String
+  version    Int
+  snapshot   Json     // Full question data at this version
+  createdAt  DateTime @default(now())
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([questionId, version])
+  @@index([questionId])
+}
+
+model Mistake {
+  id                String           @id @default(uuid())
+  userId            String
+  questionAttemptId String           @unique
+  category          MistakeCategory
+  confidence        Float?
+  explanation       String?
+  createdAt         DateTime         @default(now())
+
+  profile  Profile         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  attempt  QuestionAttempt @relation(fields: [questionAttemptId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([questionAttemptId])
+}
+
+// ─── Import Entities ──────────────────────────────────────────────
+
+model Document {
+  id               String          @id @default(uuid())
+  filename         String
+  mimeType         String
+  storagePath      String
+  fileSize         Int
+  pageCount        Int?
+  processingStatus DocumentStatus  @default(PENDING)
+  uploadedAt       DateTime        @default(now())
+
+  imports ContentImport[]
+  sources ExamSource[]
+}
+
+model ExamSource {
+  id               String   @id @default(uuid())
+  examId           String
+  documentId       String
+  sourceName       String?
+  sourceUrl        String?
+  originalFilename String
+  createdAt        DateTime @default(now())
+
+  exam     Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@index([examId])
+  @@index([documentId])
+}
+
+model ContentImport {
+  id               String              @id @default(uuid())
+  documentId       String
+  examId           String?
+  extractionStatus ImportStepStatus    @default(PENDING)
+  ocrStatus        ImportStepStatus    @default(N_A)
+  aiParsingStatus  ImportStepStatus    @default(PENDING)
+  aiConfidence     Float?
+  warnings         Json?               // string[]
+  errors           Json?               // string[]
+  parserVersion    String?
+  createdAt        DateTime            @default(now())
+  completedAt      DateTime?
+
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  exam     Exam?    @relation(fields: [examId], references: [id], onDelete: Restrict)
+
+  @@index([documentId])
+  @@index([examId])
+}
+
+// ─── Enums ────────────────────────────────────────────────────────
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+enum ExamMode {
+  REAL_EXAM
+  PRACTICE
+  BOTH
+}
+
+enum ExamStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum QuestionType {
+  MULTIPLE_CHOICE
+  TRUE_FALSE
+  SHORT_TEXT
+  FILL_BLANK
+  MATCHING
+  WRITING
+}
+
+enum PassageType {
+  READING_TEXT
+  AUDIO_TRANSCRIPT
+  IMAGE
+  OTHER
+}
+
+enum AttemptStatus {
+  IN_PROGRESS
+  SUBMITTED
+  TIME_UP
+}
+
+enum AttemptMode {
+  REAL_EXAM
+  PRACTICE
+}
+
+enum MistakeCategory {
+  CARELESS_MISTAKE
+  KNOWLEDGE_GAP
+  VOCABULARY_GAP
+  GRAMMAR_GAP
+  READING_COMPREHENSION
+  INFERENCE_ERROR
+  QUESTION_MISUNDERSTANDING
+  TIME_PRESSURE
+  UNKNOWN
+}
+
+enum DocumentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum ImportStepStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  N_A
+}
