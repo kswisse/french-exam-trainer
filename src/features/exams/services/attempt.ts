@@ -3,7 +3,7 @@ import { gradeAnswer, calculateExamResult } from "@/services/scoring";
 import type { QuestionSnapshot } from "@/types/attempt";
 import type { AttemptMode } from "@/generated/prisma/browser";
 
-function buildQuestionSnapshot(question: {
+export function buildQuestionSnapshot(question: {
   id: string;
   passageId?: string | null;
   text: string;
