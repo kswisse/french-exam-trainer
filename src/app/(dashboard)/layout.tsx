@@ -24,6 +24,12 @@ export default async function DashboardLayout({
             >
               Exams
             </Link>
+            <Link
+              href="/question-bank"
+              className="text-sm text-muted-foreground hover:text-foreground"
+            >
+              Question Bank
+            </Link>
             <span className="text-sm text-muted-foreground">
               {user.displayName ?? user.email}
             </span>
