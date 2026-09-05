@@ -23,3 +23,11 @@ export async function getFileUrl(path: string) {
     .createSignedUrl(path, 3600);
   return data?.signedUrl;
 }
+
+export async function downloadFile(path: string): Promise<Buffer> {
+  const { data, error } = await supabase.storage
+    .from("exam-documents")
+    .download(path);
+  if (error) throw error;
+  return Buffer.from(await data.arrayBuffer());
+}
