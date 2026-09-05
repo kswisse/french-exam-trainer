@@ -7,6 +7,10 @@ export async function GET(request: Request) {
   const code = searchParams.get("code");
   const next = searchParams.get("next") ?? "/dashboard";
 
+  if (!next.startsWith("/") || next.includes("://")) {
+    return NextResponse.redirect(`${origin}/login?error=invalid_redirect`);
+  }
+
   if (code) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
@@ -35,36 +39,4 @@ export async function GET(request: Request) {
   }
 
   return NextResponse.redirect(`${origin}/login?error=auth_failed`);
-}
-
-export async function POST(request: Request) {
-  try {
-    const body = await request.json();
-    const { userId, email, displayName } = body;
-
-    if (!userId || !email) {
-      return NextResponse.json(
-        { error: "userId and email are required" },
-        { status: 400 }
-      );
-    }
-
-    await prisma.profile.upsert({
-      where: { id: userId },
-      update: { displayName },
-      create: {
-        id: userId,
-        email,
-        displayName: displayName || null,
-      },
-    });
-
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error("Failed to create profile:", error);
-    return NextResponse.json(
-      { error: "Failed to create profile" },
-      { status: 500 }
-    );
-  }
 }

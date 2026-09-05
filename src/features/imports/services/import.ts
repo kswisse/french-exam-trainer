@@ -62,10 +62,27 @@ export async function approveImport(importId: string, profileId: string) {
       },
     });
 
+    const passageIds: string[] = [];
+    if (sectionData.passages) {
+      for (let p = 0; p < sectionData.passages.length; p++) {
+        const passageData = sectionData.passages[p];
+        const passage = await prisma.passage.create({
+          data: {
+            sectionId: section.id,
+            title: passageData.title,
+            content: passageData.content,
+            type: passageData.type as any,
+          },
+        });
+        passageIds.push(passage.id);
+      }
+    }
+
     for (const q of sectionData.questions) {
       const question = await prisma.question.create({
         data: {
           sectionId: section.id,
+          passageId: q.passageIndex !== undefined ? passageIds[q.passageIndex] : null,
           text: q.text,
           instructions: q.instructions,
           type: q.type as any,
@@ -88,6 +105,19 @@ export async function approveImport(importId: string, profileId: string) {
                 : Array.isArray(q.correctAnswer)
                   ? q.correctAnswer.includes(o.label)
                   : false,
+          })),
+        });
+      }
+
+      if (q.correctAnswer && !q.options) {
+        const answers = Array.isArray(q.correctAnswer)
+          ? q.correctAnswer
+          : [q.correctAnswer];
+        await prisma.questionAnswer.createMany({
+          data: answers.map((a) => ({
+            questionId: question.id,
+            text: a,
+            isAcceptable: true,
           })),
         });
       }

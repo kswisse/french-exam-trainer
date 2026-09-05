@@ -48,7 +48,9 @@ export function useAutosave({ attemptId, answers }: UseAutosaveProps): UseAutosa
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const pendingChanges = useRef(false);
 
-  answersRef.current = answers;
+  useEffect(() => {
+    answersRef.current = answers;
+  }, [answers]);
 
   const saveToServer = useCallback(async (answersToSave: Map<string, Answer>) => {
     setIsSaving(true);

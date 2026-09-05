@@ -10,13 +10,16 @@ export async function parseExamWithAI(importId: string) {
 
   const ai = getAIProvider();
   const parsed = await ai.parseExam(
-    "",
+    contentImport.extractedText || "",
     { filename: contentImport.document.filename }
   );
 
   await prisma.contentImport.update({
     where: { id: importId },
-    data: { aiParsingStatus: "COMPLETED" },
+    data: {
+      aiParsingStatus: "COMPLETED",
+      extractedText: JSON.stringify(parsed),
+    },
   });
 
   return parsed;

@@ -45,7 +45,10 @@ export function useExamTimer({ timeLimitMinutes, onSubmit, attemptId }: UseExamT
   const [isRunning, setIsRunning] = useState(true);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const onSubmitRef = useRef(onSubmit);
-  onSubmitRef.current = onSubmit;
+
+  useEffect(() => {
+    onSubmitRef.current = onSubmit;
+  }, [onSubmit]);
 
   useEffect(() => {
     if (!isRunning || timeRemaining <= 0) return;

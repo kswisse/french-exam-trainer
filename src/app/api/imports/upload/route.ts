@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth";
 import { uploadDocument } from "@/features/imports/services/upload";
+import { runImportPipeline } from "@/features/imports/services/pipeline";
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,6 +15,10 @@ export async function POST(request: NextRequest) {
     }
 
     const result = await uploadDocument(file);
+
+    runImportPipeline(result.contentImport.id).catch((err) => {
+      console.error("Pipeline failed:", err);
+    });
 
     return NextResponse.json(result, { status: 201 });
   } catch (error) {

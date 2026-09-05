@@ -25,6 +25,12 @@ export default async function DashboardLayout({
               Exams
             </Link>
             <Link
+              href="/practice"
+              className="text-sm text-muted-foreground hover:text-foreground"
+            >
+              Practice
+            </Link>
+            <Link
               href="/question-bank"
               className="text-sm text-muted-foreground hover:text-foreground"
             >
