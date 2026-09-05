@@ -99,6 +99,18 @@ export const DocumentStatus = {
 export type DocumentStatus = (typeof DocumentStatus)[keyof typeof DocumentStatus]
 
 
+export const ImportStatus = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  FAILED: 'FAILED'
+} as const
+
+export type ImportStatus = (typeof ImportStatus)[keyof typeof ImportStatus]
+
+
 export const ImportStepStatus = {
   PENDING: 'PENDING',
   RUNNING: 'RUNNING',

@@ -38,10 +38,12 @@ export type ContentImportMinAggregateOutputType = {
   id: string | null
   documentId: string | null
   examId: string | null
+  status: $Enums.ImportStatus | null
   extractionStatus: $Enums.ImportStepStatus | null
   ocrStatus: $Enums.ImportStepStatus | null
   aiParsingStatus: $Enums.ImportStepStatus | null
   aiConfidence: number | null
+  extractedText: string | null
   parserVersion: string | null
   createdAt: Date | null
   completedAt: Date | null
@@ -51,10 +53,12 @@ export type ContentImportMaxAggregateOutputType = {
   id: string | null
   documentId: string | null
   examId: string | null
+  status: $Enums.ImportStatus | null
   extractionStatus: $Enums.ImportStepStatus | null
   ocrStatus: $Enums.ImportStepStatus | null
   aiParsingStatus: $Enums.ImportStepStatus | null
   aiConfidence: number | null
+  extractedText: string | null
   parserVersion: string | null
   createdAt: Date | null
   completedAt: Date | null
@@ -64,10 +68,12 @@ export type ContentImportCountAggregateOutputType = {
   id: number
   documentId: number
   examId: number
+  status: number
   extractionStatus: number
   ocrStatus: number
   aiParsingStatus: number
   aiConfidence: number
+  extractedText: number
   warnings: number
   errors: number
   parserVersion: number
@@ -89,10 +95,12 @@ export type ContentImportMinAggregateInputType = {
   id?: true
   documentId?: true
   examId?: true
+  status?: true
   extractionStatus?: true
   ocrStatus?: true
   aiParsingStatus?: true
   aiConfidence?: true
+  extractedText?: true
   parserVersion?: true
   createdAt?: true
   completedAt?: true
@@ -102,10 +110,12 @@ export type ContentImportMaxAggregateInputType = {
   id?: true
   documentId?: true
   examId?: true
+  status?: true
   extractionStatus?: true
   ocrStatus?: true
   aiParsingStatus?: true
   aiConfidence?: true
+  extractedText?: true
   parserVersion?: true
   createdAt?: true
   completedAt?: true
@@ -115,10 +125,12 @@ export type ContentImportCountAggregateInputType = {
   id?: true
   documentId?: true
   examId?: true
+  status?: true
   extractionStatus?: true
   ocrStatus?: true
   aiParsingStatus?: true
   aiConfidence?: true
+  extractedText?: true
   warnings?: true
   errors?: true
   parserVersion?: true
@@ -217,10 +229,12 @@ export type ContentImportGroupByOutputType = {
   id: string
   documentId: string
   examId: string | null
+  status: $Enums.ImportStatus
   extractionStatus: $Enums.ImportStepStatus
   ocrStatus: $Enums.ImportStepStatus
   aiParsingStatus: $Enums.ImportStepStatus
   aiConfidence: number | null
+  extractedText: string | null
   warnings: runtime.JsonValue | null
   errors: runtime.JsonValue | null
   parserVersion: string | null
@@ -255,10 +269,12 @@ export type ContentImportWhereInput = {
   id?: Prisma.StringFilter<"ContentImport"> | string
   documentId?: Prisma.StringFilter<"ContentImport"> | string
   examId?: Prisma.StringNullableFilter<"ContentImport"> | string | null
+  status?: Prisma.EnumImportStatusFilter<"ContentImport"> | $Enums.ImportStatus
   extractionStatus?: Prisma.EnumImportStepStatusFilter<"ContentImport"> | $Enums.ImportStepStatus
   ocrStatus?: Prisma.EnumImportStepStatusFilter<"ContentImport"> | $Enums.ImportStepStatus
   aiParsingStatus?: Prisma.EnumImportStepStatusFilter<"ContentImport"> | $Enums.ImportStepStatus
   aiConfidence?: Prisma.FloatNullableFilter<"ContentImport"> | number | null
+  extractedText?: Prisma.StringNullableFilter<"ContentImport"> | string | null
   warnings?: Prisma.JsonNullableFilter<"ContentImport">
   errors?: Prisma.JsonNullableFilter<"ContentImport">
   parserVersion?: Prisma.StringNullableFilter<"ContentImport"> | string | null
@@ -272,10 +288,12 @@ export type ContentImportOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   documentId?: Prisma.SortOrder
   examId?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   extractionStatus?: Prisma.SortOrder
   ocrStatus?: Prisma.SortOrder
   aiParsingStatus?: Prisma.SortOrder
   aiConfidence?: Prisma.SortOrderInput | Prisma.SortOrder
+  extractedText?: Prisma.SortOrderInput | Prisma.SortOrder
   warnings?: Prisma.SortOrderInput | Prisma.SortOrder
   errors?: Prisma.SortOrderInput | Prisma.SortOrder
   parserVersion?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -292,10 +310,12 @@ export type ContentImportWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ContentImportWhereInput | Prisma.ContentImportWhereInput[]
   documentId?: Prisma.StringFilter<"ContentImport"> | string
   examId?: Prisma.StringNullableFilter<"ContentImport"> | string | null
+  status?: Prisma.EnumImportStatusFilter<"ContentImport"> | $Enums.ImportStatus
   extractionStatus?: Prisma.EnumImportStepStatusFilter<"ContentImport"> | $Enums.ImportStepStatus
   ocrStatus?: Prisma.EnumImportStepStatusFilter<"ContentImport"> | $Enums.ImportStepStatus
   aiParsingStatus?: Prisma.EnumImportStepStatusFilter<"ContentImport"> | $Enums.ImportStepStatus
   aiConfidence?: Prisma.FloatNullableFilter<"ContentImport"> | number | null
+  extractedText?: Prisma.StringNullableFilter<"ContentImport"> | string | null
   warnings?: Prisma.JsonNullableFilter<"ContentImport">
   errors?: Prisma.JsonNullableFilter<"ContentImport">
   parserVersion?: Prisma.StringNullableFilter<"ContentImport"> | string | null
@@ -309,10 +329,12 @@ export type ContentImportOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   documentId?: Prisma.SortOrder
   examId?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   extractionStatus?: Prisma.SortOrder
   ocrStatus?: Prisma.SortOrder
   aiParsingStatus?: Prisma.SortOrder
   aiConfidence?: Prisma.SortOrderInput | Prisma.SortOrder
+  extractedText?: Prisma.SortOrderInput | Prisma.SortOrder
   warnings?: Prisma.SortOrderInput | Prisma.SortOrder
   errors?: Prisma.SortOrderInput | Prisma.SortOrder
   parserVersion?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -332,10 +354,12 @@ export type ContentImportScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"ContentImport"> | string
   documentId?: Prisma.StringWithAggregatesFilter<"ContentImport"> | string
   examId?: Prisma.StringNullableWithAggregatesFilter<"ContentImport"> | string | null
+  status?: Prisma.EnumImportStatusWithAggregatesFilter<"ContentImport"> | $Enums.ImportStatus
   extractionStatus?: Prisma.EnumImportStepStatusWithAggregatesFilter<"ContentImport"> | $Enums.ImportStepStatus
   ocrStatus?: Prisma.EnumImportStepStatusWithAggregatesFilter<"ContentImport"> | $Enums.ImportStepStatus
   aiParsingStatus?: Prisma.EnumImportStepStatusWithAggregatesFilter<"ContentImport"> | $Enums.ImportStepStatus
   aiConfidence?: Prisma.FloatNullableWithAggregatesFilter<"ContentImport"> | number | null
+  extractedText?: Prisma.StringNullableWithAggregatesFilter<"ContentImport"> | string | null
   warnings?: Prisma.JsonNullableWithAggregatesFilter<"ContentImport">
   errors?: Prisma.JsonNullableWithAggregatesFilter<"ContentImport">
   parserVersion?: Prisma.StringNullableWithAggregatesFilter<"ContentImport"> | string | null
@@ -345,10 +369,12 @@ export type ContentImportScalarWhereWithAggregatesInput = {
 
 export type ContentImportCreateInput = {
   id?: string
+  status?: $Enums.ImportStatus
   extractionStatus?: $Enums.ImportStepStatus
   ocrStatus?: $Enums.ImportStepStatus
   aiParsingStatus?: $Enums.ImportStepStatus
   aiConfidence?: number | null
+  extractedText?: string | null
   warnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   parserVersion?: string | null
@@ -362,10 +388,12 @@ export type ContentImportUncheckedCreateInput = {
   id?: string
   documentId: string
   examId?: string | null
+  status?: $Enums.ImportStatus
   extractionStatus?: $Enums.ImportStepStatus
   ocrStatus?: $Enums.ImportStepStatus
   aiParsingStatus?: $Enums.ImportStepStatus
   aiConfidence?: number | null
+  extractedText?: string | null
   warnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   parserVersion?: string | null
@@ -375,10 +403,12 @@ export type ContentImportUncheckedCreateInput = {
 
 export type ContentImportUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumImportStatusFieldUpdateOperationsInput | $Enums.ImportStatus
   extractionStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   ocrStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   aiParsingStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  extractedText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   parserVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -392,10 +422,12 @@ export type ContentImportUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   documentId?: Prisma.StringFieldUpdateOperationsInput | string
   examId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumImportStatusFieldUpdateOperationsInput | $Enums.ImportStatus
   extractionStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   ocrStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   aiParsingStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  extractedText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   parserVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -407,10 +439,12 @@ export type ContentImportCreateManyInput = {
   id?: string
   documentId: string
   examId?: string | null
+  status?: $Enums.ImportStatus
   extractionStatus?: $Enums.ImportStepStatus
   ocrStatus?: $Enums.ImportStepStatus
   aiParsingStatus?: $Enums.ImportStepStatus
   aiConfidence?: number | null
+  extractedText?: string | null
   warnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   parserVersion?: string | null
@@ -420,10 +454,12 @@ export type ContentImportCreateManyInput = {
 
 export type ContentImportUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumImportStatusFieldUpdateOperationsInput | $Enums.ImportStatus
   extractionStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   ocrStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   aiParsingStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  extractedText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   parserVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -435,10 +471,12 @@ export type ContentImportUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   documentId?: Prisma.StringFieldUpdateOperationsInput | string
   examId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumImportStatusFieldUpdateOperationsInput | $Enums.ImportStatus
   extractionStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   ocrStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   aiParsingStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  extractedText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   parserVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -460,10 +498,12 @@ export type ContentImportCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   documentId?: Prisma.SortOrder
   examId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   extractionStatus?: Prisma.SortOrder
   ocrStatus?: Prisma.SortOrder
   aiParsingStatus?: Prisma.SortOrder
   aiConfidence?: Prisma.SortOrder
+  extractedText?: Prisma.SortOrder
   warnings?: Prisma.SortOrder
   errors?: Prisma.SortOrder
   parserVersion?: Prisma.SortOrder
@@ -479,10 +519,12 @@ export type ContentImportMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   documentId?: Prisma.SortOrder
   examId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   extractionStatus?: Prisma.SortOrder
   ocrStatus?: Prisma.SortOrder
   aiParsingStatus?: Prisma.SortOrder
   aiConfidence?: Prisma.SortOrder
+  extractedText?: Prisma.SortOrder
   parserVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
@@ -492,10 +534,12 @@ export type ContentImportMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   documentId?: Prisma.SortOrder
   examId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   extractionStatus?: Prisma.SortOrder
   ocrStatus?: Prisma.SortOrder
   aiParsingStatus?: Prisma.SortOrder
   aiConfidence?: Prisma.SortOrder
+  extractedText?: Prisma.SortOrder
   parserVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
@@ -589,16 +633,22 @@ export type ContentImportUncheckedUpdateManyWithoutDocumentNestedInput = {
   deleteMany?: Prisma.ContentImportScalarWhereInput | Prisma.ContentImportScalarWhereInput[]
 }
 
+export type EnumImportStatusFieldUpdateOperationsInput = {
+  set?: $Enums.ImportStatus
+}
+
 export type EnumImportStepStatusFieldUpdateOperationsInput = {
   set?: $Enums.ImportStepStatus
 }
 
 export type ContentImportCreateWithoutExamInput = {
   id?: string
+  status?: $Enums.ImportStatus
   extractionStatus?: $Enums.ImportStepStatus
   ocrStatus?: $Enums.ImportStepStatus
   aiParsingStatus?: $Enums.ImportStepStatus
   aiConfidence?: number | null
+  extractedText?: string | null
   warnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   parserVersion?: string | null
@@ -610,10 +660,12 @@ export type ContentImportCreateWithoutExamInput = {
 export type ContentImportUncheckedCreateWithoutExamInput = {
   id?: string
   documentId: string
+  status?: $Enums.ImportStatus
   extractionStatus?: $Enums.ImportStepStatus
   ocrStatus?: $Enums.ImportStepStatus
   aiParsingStatus?: $Enums.ImportStepStatus
   aiConfidence?: number | null
+  extractedText?: string | null
   warnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   parserVersion?: string | null
@@ -654,10 +706,12 @@ export type ContentImportScalarWhereInput = {
   id?: Prisma.StringFilter<"ContentImport"> | string
   documentId?: Prisma.StringFilter<"ContentImport"> | string
   examId?: Prisma.StringNullableFilter<"ContentImport"> | string | null
+  status?: Prisma.EnumImportStatusFilter<"ContentImport"> | $Enums.ImportStatus
   extractionStatus?: Prisma.EnumImportStepStatusFilter<"ContentImport"> | $Enums.ImportStepStatus
   ocrStatus?: Prisma.EnumImportStepStatusFilter<"ContentImport"> | $Enums.ImportStepStatus
   aiParsingStatus?: Prisma.EnumImportStepStatusFilter<"ContentImport"> | $Enums.ImportStepStatus
   aiConfidence?: Prisma.FloatNullableFilter<"ContentImport"> | number | null
+  extractedText?: Prisma.StringNullableFilter<"ContentImport"> | string | null
   warnings?: Prisma.JsonNullableFilter<"ContentImport">
   errors?: Prisma.JsonNullableFilter<"ContentImport">
   parserVersion?: Prisma.StringNullableFilter<"ContentImport"> | string | null
@@ -667,10 +721,12 @@ export type ContentImportScalarWhereInput = {
 
 export type ContentImportCreateWithoutDocumentInput = {
   id?: string
+  status?: $Enums.ImportStatus
   extractionStatus?: $Enums.ImportStepStatus
   ocrStatus?: $Enums.ImportStepStatus
   aiParsingStatus?: $Enums.ImportStepStatus
   aiConfidence?: number | null
+  extractedText?: string | null
   warnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   parserVersion?: string | null
@@ -682,10 +738,12 @@ export type ContentImportCreateWithoutDocumentInput = {
 export type ContentImportUncheckedCreateWithoutDocumentInput = {
   id?: string
   examId?: string | null
+  status?: $Enums.ImportStatus
   extractionStatus?: $Enums.ImportStepStatus
   ocrStatus?: $Enums.ImportStepStatus
   aiParsingStatus?: $Enums.ImportStepStatus
   aiConfidence?: number | null
+  extractedText?: string | null
   warnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   parserVersion?: string | null
@@ -722,10 +780,12 @@ export type ContentImportUpdateManyWithWhereWithoutDocumentInput = {
 export type ContentImportCreateManyExamInput = {
   id?: string
   documentId: string
+  status?: $Enums.ImportStatus
   extractionStatus?: $Enums.ImportStepStatus
   ocrStatus?: $Enums.ImportStepStatus
   aiParsingStatus?: $Enums.ImportStepStatus
   aiConfidence?: number | null
+  extractedText?: string | null
   warnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   parserVersion?: string | null
@@ -735,10 +795,12 @@ export type ContentImportCreateManyExamInput = {
 
 export type ContentImportUpdateWithoutExamInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumImportStatusFieldUpdateOperationsInput | $Enums.ImportStatus
   extractionStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   ocrStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   aiParsingStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  extractedText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   parserVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -750,10 +812,12 @@ export type ContentImportUpdateWithoutExamInput = {
 export type ContentImportUncheckedUpdateWithoutExamInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   documentId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumImportStatusFieldUpdateOperationsInput | $Enums.ImportStatus
   extractionStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   ocrStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   aiParsingStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  extractedText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   parserVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -764,10 +828,12 @@ export type ContentImportUncheckedUpdateWithoutExamInput = {
 export type ContentImportUncheckedUpdateManyWithoutExamInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   documentId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumImportStatusFieldUpdateOperationsInput | $Enums.ImportStatus
   extractionStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   ocrStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   aiParsingStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  extractedText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   parserVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -778,10 +844,12 @@ export type ContentImportUncheckedUpdateManyWithoutExamInput = {
 export type ContentImportCreateManyDocumentInput = {
   id?: string
   examId?: string | null
+  status?: $Enums.ImportStatus
   extractionStatus?: $Enums.ImportStepStatus
   ocrStatus?: $Enums.ImportStepStatus
   aiParsingStatus?: $Enums.ImportStepStatus
   aiConfidence?: number | null
+  extractedText?: string | null
   warnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   parserVersion?: string | null
@@ -791,10 +859,12 @@ export type ContentImportCreateManyDocumentInput = {
 
 export type ContentImportUpdateWithoutDocumentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumImportStatusFieldUpdateOperationsInput | $Enums.ImportStatus
   extractionStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   ocrStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   aiParsingStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  extractedText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   parserVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -806,10 +876,12 @@ export type ContentImportUpdateWithoutDocumentInput = {
 export type ContentImportUncheckedUpdateWithoutDocumentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   examId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumImportStatusFieldUpdateOperationsInput | $Enums.ImportStatus
   extractionStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   ocrStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   aiParsingStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  extractedText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   parserVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -820,10 +892,12 @@ export type ContentImportUncheckedUpdateWithoutDocumentInput = {
 export type ContentImportUncheckedUpdateManyWithoutDocumentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   examId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumImportStatusFieldUpdateOperationsInput | $Enums.ImportStatus
   extractionStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   ocrStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   aiParsingStatus?: Prisma.EnumImportStepStatusFieldUpdateOperationsInput | $Enums.ImportStepStatus
   aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  extractedText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   warnings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   parserVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -837,10 +911,12 @@ export type ContentImportSelect<ExtArgs extends runtime.Types.Extensions.Interna
   id?: boolean
   documentId?: boolean
   examId?: boolean
+  status?: boolean
   extractionStatus?: boolean
   ocrStatus?: boolean
   aiParsingStatus?: boolean
   aiConfidence?: boolean
+  extractedText?: boolean
   warnings?: boolean
   errors?: boolean
   parserVersion?: boolean
@@ -854,10 +930,12 @@ export type ContentImportSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   id?: boolean
   documentId?: boolean
   examId?: boolean
+  status?: boolean
   extractionStatus?: boolean
   ocrStatus?: boolean
   aiParsingStatus?: boolean
   aiConfidence?: boolean
+  extractedText?: boolean
   warnings?: boolean
   errors?: boolean
   parserVersion?: boolean
@@ -871,10 +949,12 @@ export type ContentImportSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   id?: boolean
   documentId?: boolean
   examId?: boolean
+  status?: boolean
   extractionStatus?: boolean
   ocrStatus?: boolean
   aiParsingStatus?: boolean
   aiConfidence?: boolean
+  extractedText?: boolean
   warnings?: boolean
   errors?: boolean
   parserVersion?: boolean
@@ -888,10 +968,12 @@ export type ContentImportSelectScalar = {
   id?: boolean
   documentId?: boolean
   examId?: boolean
+  status?: boolean
   extractionStatus?: boolean
   ocrStatus?: boolean
   aiParsingStatus?: boolean
   aiConfidence?: boolean
+  extractedText?: boolean
   warnings?: boolean
   errors?: boolean
   parserVersion?: boolean
@@ -899,7 +981,7 @@ export type ContentImportSelectScalar = {
   completedAt?: boolean
 }
 
-export type ContentImportOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "documentId" | "examId" | "extractionStatus" | "ocrStatus" | "aiParsingStatus" | "aiConfidence" | "warnings" | "errors" | "parserVersion" | "createdAt" | "completedAt", ExtArgs["result"]["contentImport"]>
+export type ContentImportOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "documentId" | "examId" | "status" | "extractionStatus" | "ocrStatus" | "aiParsingStatus" | "aiConfidence" | "extractedText" | "warnings" | "errors" | "parserVersion" | "createdAt" | "completedAt", ExtArgs["result"]["contentImport"]>
 export type ContentImportInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document?: boolean | Prisma.DocumentDefaultArgs<ExtArgs>
   exam?: boolean | Prisma.ContentImport$examArgs<ExtArgs>
@@ -923,10 +1005,12 @@ export type $ContentImportPayload<ExtArgs extends runtime.Types.Extensions.Inter
     id: string
     documentId: string
     examId: string | null
+    status: $Enums.ImportStatus
     extractionStatus: $Enums.ImportStepStatus
     ocrStatus: $Enums.ImportStepStatus
     aiParsingStatus: $Enums.ImportStepStatus
     aiConfidence: number | null
+    extractedText: string | null
     warnings: runtime.JsonValue | null
     errors: runtime.JsonValue | null
     parserVersion: string | null
@@ -1360,10 +1444,12 @@ export interface ContentImportFieldRefs {
   readonly id: Prisma.FieldRef<"ContentImport", 'String'>
   readonly documentId: Prisma.FieldRef<"ContentImport", 'String'>
   readonly examId: Prisma.FieldRef<"ContentImport", 'String'>
+  readonly status: Prisma.FieldRef<"ContentImport", 'ImportStatus'>
   readonly extractionStatus: Prisma.FieldRef<"ContentImport", 'ImportStepStatus'>
   readonly ocrStatus: Prisma.FieldRef<"ContentImport", 'ImportStepStatus'>
   readonly aiParsingStatus: Prisma.FieldRef<"ContentImport", 'ImportStepStatus'>
   readonly aiConfidence: Prisma.FieldRef<"ContentImport", 'Float'>
+  readonly extractedText: Prisma.FieldRef<"ContentImport", 'String'>
   readonly warnings: Prisma.FieldRef<"ContentImport", 'Json'>
   readonly errors: Prisma.FieldRef<"ContentImport", 'Json'>
   readonly parserVersion: Prisma.FieldRef<"ContentImport", 'String'>

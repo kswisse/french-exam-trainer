@@ -1855,10 +1855,12 @@ export const ContentImportScalarFieldEnum = {
   id: 'id',
   documentId: 'documentId',
   examId: 'examId',
+  status: 'status',
   extractionStatus: 'extractionStatus',
   ocrStatus: 'ocrStatus',
   aiParsingStatus: 'aiParsingStatus',
   aiConfidence: 'aiConfidence',
+  extractedText: 'extractedText',
   warnings: 'warnings',
   errors: 'errors',
   parserVersion: 'parserVersion',
@@ -2123,6 +2125,20 @@ export type EnumDocumentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$P
  * Reference to a field of type 'DocumentStatus[]'
  */
 export type ListEnumDocumentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DocumentStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ImportStatus'
+ */
+export type EnumImportStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ImportStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'ImportStatus[]'
+ */
+export type ListEnumImportStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ImportStatus[]'>
     
 
 

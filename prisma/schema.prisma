@@ -254,10 +254,12 @@ model ContentImport {
   id               String              @id @default(uuid())
   documentId       String
   examId           String?
+  status           ImportStatus        @default(PENDING)
   extractionStatus ImportStepStatus    @default(PENDING)
   ocrStatus        ImportStepStatus    @default(N_A)
   aiParsingStatus  ImportStepStatus    @default(PENDING)
   aiConfidence     Float?
+  extractedText    String?             // JSON string of parsed exam data
   warnings         Json?               // string[]
   errors           Json?               // string[]
   parserVersion    String?
@@ -333,6 +335,15 @@ enum DocumentStatus {
   PENDING
   PROCESSING
   COMPLETED
+  FAILED
+}
+
+enum ImportStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  APPROVED
+  REJECTED
   FAILED
 }
 
