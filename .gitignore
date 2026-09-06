@@ -42,3 +42,11 @@ coverage/
 
 # Vercel
 .vercel
+prisma/.test-creds.json
+prisma/check-tables.js
+prisma/debug-sql.js
+prisma/dev.log
+prisma/e2e-*.js
+prisma/init.sql
+prisma/run-sql.js
+prisma/test-direct.js
