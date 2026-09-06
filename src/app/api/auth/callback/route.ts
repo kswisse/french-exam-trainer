@@ -4,23 +4,26 @@ import { prisma } from "@/lib/db";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { userId, email, displayName } = body;
+    const supabase = await createClient();
+    const { data: { user }, error } = await supabase.auth.getUser();
 
-    if (!userId || !email || typeof userId !== "string" || typeof email !== "string") {
-      return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
+    if (error || !user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    if (userId.length > 100 || email.length > 200) {
-      return NextResponse.json({ error: "Payload too long" }, { status: 400 });
+    const body = await request.json();
+    const { displayName } = body;
+
+    if (user.id !== body.userId) {
+      return NextResponse.json({ error: "userId mismatch" }, { status: 403 });
     }
 
     await prisma.profile.upsert({
-      where: { id: userId },
+      where: { id: user.id },
       update: {},
       create: {
-        id: userId,
-        email: email,
+        id: user.id,
+        email: user.email!,
         displayName: typeof displayName === "string" ? displayName : null,
       },
     });

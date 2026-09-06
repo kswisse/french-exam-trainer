@@ -21,6 +21,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const supabase = createClient();
@@ -48,20 +49,35 @@ export default function RegisterPage() {
       return;
     }
 
-    const response = await fetch("/api/auth/callback", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userId: authData.user.id,
-        email,
-        displayName,
-      }),
-    });
+    // If session exists (email confirmation disabled), create profile immediately
+    if (authData.session) {
+      const response = await fetch("/api/auth/callback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: authData.user.id,
+          email,
+          displayName,
+        }),
+      });
 
-    if (!response.ok) {
-      const data = await response.json();
-      setError(data.error || "Failed to create profile");
+      if (!response.ok) {
+        const data = await response.json();
+        setError(data.error || "Failed to create profile");
+        setLoading(false);
+        return;
+      }
+    }
+
+    // If no session (email confirmation enabled), profile will be created
+    // when user confirms email and hits GET /api/auth/callback
+    if (!authData.session) {
+      setError(null);
+      setSuccess("Check your email for a confirmation link. You can sign in after confirming.");
       setLoading(false);
+      setEmail("");
+      setPassword("");
+      setDisplayName("");
       return;
     }
 
@@ -83,6 +99,11 @@ export default function RegisterPage() {
           {error && (
             <div className="rounded-md bg-red-50 p-3 text-sm text-red-600">
               {error}
+            </div>
+          )}
+          {success && (
+            <div className="rounded-md bg-green-50 p-3 text-sm text-green-600">
+              {success}
             </div>
           )}
           <div className="space-y-2">

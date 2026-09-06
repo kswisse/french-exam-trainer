@@ -58,12 +58,12 @@ export function AvailableExams({ availableExams }: AvailableExamsProps) {
               <div className="flex gap-2 shrink-0">
                 {exam.mode !== "PRACTICE" && (
                   <Button asChild size="sm">
-                    <Link href={`/exam/${exam.id}/take`}>Take Exam</Link>
+                    <Link href={`/exams/${exam.id}/take`}>Take Exam</Link>
                   </Button>
                 )}
                 {exam.mode !== "REAL_EXAM" && (
                   <Button asChild size="sm" variant="outline">
-                    <Link href={`/exam/${exam.id}/take?mode=PRACTICE`}>
+                    <Link href={`/exams/${exam.id}/take?mode=PRACTICE`}>
                       Practice
                     </Link>
                   </Button>

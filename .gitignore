@@ -50,3 +50,10 @@ prisma/e2e-*.js
 prisma/init.sql
 prisma/run-sql.js
 prisma/test-direct.js
+prisma/.e2e-results.json
+prisma/check-data.js
+prisma/cleanup-attempts.js
+prisma/debug-take.js
+prisma/list-users.js
+prisma/trace-register.js
+prisma/commit-msg.txt
