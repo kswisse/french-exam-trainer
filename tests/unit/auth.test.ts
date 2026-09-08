@@ -3,7 +3,8 @@ import { describe, test, expect, vi, beforeEach } from "vitest";
 vi.mock("@/lib/db", () => ({
   prisma: {
     profile: {
-      upsert: vi.fn(),
+      findUnique: vi.fn(),
+      create: vi.fn(),
     },
   },
 }));
@@ -16,7 +17,8 @@ import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { createClient } from "@/lib/supabase-server";
 
-const mockUpsert = vi.mocked(prisma.profile.upsert);
+const mockFindUnique = vi.mocked(prisma.profile.findUnique);
+const mockCreate = vi.mocked(prisma.profile.create);
 const mockCreateClient = vi.mocked(createClient);
 
 function mockSupabaseUser(
@@ -34,24 +36,26 @@ function mockSupabaseUser(
 
 describe("getCurrentUser", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.resetAllMocks();
   });
 
   test("returns null when Supabase user is null", async () => {
     mockSupabaseUser(null);
     const result = await getCurrentUser();
     expect(result).toBeNull();
-    expect(mockUpsert).not.toHaveBeenCalled();
+    expect(mockFindUnique).not.toHaveBeenCalled();
+    expect(mockCreate).not.toHaveBeenCalled();
   });
 
   test("returns null when user has no email", async () => {
     mockSupabaseUser({ id: "user-1", email: null });
     const result = await getCurrentUser();
     expect(result).toBeNull();
-    expect(mockUpsert).not.toHaveBeenCalled();
+    expect(mockFindUnique).not.toHaveBeenCalled();
+    expect(mockCreate).not.toHaveBeenCalled();
   });
 
-  test("creates Profile via upsert when missing", async () => {
+  test("creates Profile when missing", async () => {
     mockSupabaseUser({
       id: "user-1",
       email: "test@example.com",
@@ -63,14 +67,14 @@ describe("getCurrentUser", () => {
       displayName: "Test User",
       role: "STUDENT",
     };
-    mockUpsert.mockResolvedValue(fakeProfile as never);
+    mockFindUnique.mockResolvedValueOnce(null).mockResolvedValueOnce(fakeProfile as never);
+    mockCreate.mockResolvedValue(fakeProfile as never);
 
     const result = await getCurrentUser();
 
-    expect(mockUpsert).toHaveBeenCalledWith({
-      where: { id: "user-1" },
-      update: {},
-      create: {
+    expect(mockFindUnique).toHaveBeenCalledWith({ where: { id: "user-1" } });
+    expect(mockCreate).toHaveBeenCalledWith({
+      data: {
         id: "user-1",
         email: "test@example.com",
         displayName: "Test User",
@@ -91,19 +95,12 @@ describe("getCurrentUser", () => {
       displayName: "Original Name",
       role: "STUDENT",
     };
-    mockUpsert.mockResolvedValue(existingProfile as never);
+    mockFindUnique.mockResolvedValue(existingProfile as never);
 
     const result = await getCurrentUser();
 
-    expect(mockUpsert).toHaveBeenCalledWith({
-      where: { id: "user-1" },
-      update: {},
-      create: {
-        id: "user-1",
-        email: "test@example.com",
-        displayName: "New Name",
-      },
-    });
+    expect(mockFindUnique).toHaveBeenCalledWith({ where: { id: "user-1" } });
+    expect(mockCreate).not.toHaveBeenCalled();
     expect(result).toEqual(existingProfile);
   });
 
@@ -113,13 +110,14 @@ describe("getCurrentUser", () => {
       email: "test@example.com",
       user_metadata: { display_name: '<script>alert("xss")</script>John' },
     });
-    mockUpsert.mockResolvedValue({ id: "user-1" } as never);
+    mockFindUnique.mockResolvedValueOnce(null);
+    mockCreate.mockResolvedValue({ id: "user-1" } as never);
 
     await getCurrentUser();
 
-    expect(mockUpsert).toHaveBeenCalledWith(
+    expect(mockCreate).toHaveBeenCalledWith(
       expect.objectContaining({
-        create: expect.objectContaining({
+        data: expect.objectContaining({
           displayName: 'alert("xss")John',
         }),
       })
@@ -132,13 +130,14 @@ describe("getCurrentUser", () => {
       email: "test@example.com",
       user_metadata: { display_name: "A".repeat(200) },
     });
-    mockUpsert.mockResolvedValue({ id: "user-1" } as never);
+    mockFindUnique.mockResolvedValueOnce(null);
+    mockCreate.mockResolvedValue({ id: "user-1" } as never);
 
     await getCurrentUser();
 
-    expect(mockUpsert).toHaveBeenCalledWith(
+    expect(mockCreate).toHaveBeenCalledWith(
       expect.objectContaining({
-        create: expect.objectContaining({
+        data: expect.objectContaining({
           displayName: "A".repeat(100),
         }),
       })
@@ -151,13 +150,14 @@ describe("getCurrentUser", () => {
       email: "test@example.com",
       user_metadata: { display_name: "   " },
     });
-    mockUpsert.mockResolvedValue({ id: "user-1" } as never);
+    mockFindUnique.mockResolvedValueOnce(null);
+    mockCreate.mockResolvedValue({ id: "user-1" } as never);
 
     await getCurrentUser();
 
-    expect(mockUpsert).toHaveBeenCalledWith(
+    expect(mockCreate).toHaveBeenCalledWith(
       expect.objectContaining({
-        create: expect.objectContaining({
+        data: expect.objectContaining({
           displayName: null,
         }),
       })
@@ -170,13 +170,14 @@ describe("getCurrentUser", () => {
       email: "test@example.com",
       user_metadata: { name: "Fallback Name" },
     });
-    mockUpsert.mockResolvedValue({ id: "user-1" } as never);
+    mockFindUnique.mockResolvedValueOnce(null);
+    mockCreate.mockResolvedValue({ id: "user-1" } as never);
 
     await getCurrentUser();
 
-    expect(mockUpsert).toHaveBeenCalledWith(
+    expect(mockCreate).toHaveBeenCalledWith(
       expect.objectContaining({
-        create: expect.objectContaining({
+        data: expect.objectContaining({
           displayName: "Fallback Name",
         }),
       })
@@ -189,13 +190,14 @@ describe("getCurrentUser", () => {
       email: "test@example.com",
       user_metadata: { display_name: 12345 },
     });
-    mockUpsert.mockResolvedValue({ id: "user-1" } as never);
+    mockFindUnique.mockResolvedValueOnce(null);
+    mockCreate.mockResolvedValue({ id: "user-1" } as never);
 
     await getCurrentUser();
 
-    expect(mockUpsert).toHaveBeenCalledWith(
+    expect(mockCreate).toHaveBeenCalledWith(
       expect.objectContaining({
-        create: expect.objectContaining({
+        data: expect.objectContaining({
           displayName: null,
         }),
       })
