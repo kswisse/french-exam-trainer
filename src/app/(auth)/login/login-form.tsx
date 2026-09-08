@@ -42,7 +42,8 @@ export function LoginForm() {
     }
 
     const redirect = searchParams.get("redirect") || "/dashboard";
-    router.push(redirect);
+    const safeRedirect = redirect.startsWith("/") && !redirect.includes("://") ? redirect : "/dashboard";
+    router.push(safeRedirect);
     router.refresh();
   };
 

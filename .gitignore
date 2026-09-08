@@ -57,3 +57,6 @@ prisma/debug-take.js
 prisma/list-users.js
 prisma/trace-register.js
 prisma/commit-msg.txt
+prisma/db-audit.js
+prisma/v1-e2e.js
+prisma/.v1-e2e-results.json

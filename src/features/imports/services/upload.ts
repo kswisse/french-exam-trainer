@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import { uploadFile } from "@/lib/storage";
+import path from "path";
 
 const ALLOWED_TYPES = [
   "application/pdf",
@@ -20,16 +21,17 @@ export async function uploadDocument(file: File) {
     throw new Error("File size exceeds 50MB limit.");
   }
 
-  const path = `uploads/${Date.now()}-${file.name}`;
+  const safeFilename = path.basename(file.name).replace(/[^a-zA-Z0-9._-]/g, "_");
+  const storagePath = `uploads/${Date.now()}-${safeFilename}`;
   const buffer = Buffer.from(await file.arrayBuffer());
-  await uploadFile(buffer, path, file.type);
+  await uploadFile(buffer, storagePath, file.type);
 
   const document = await prisma.document.create({
     data: {
       filename: file.name,
       mimeType: file.type,
       fileSize: file.size,
-      storagePath: path,
+      storagePath,
     },
   });
 
